@@ -1,0 +1,42 @@
+무기 붙이기
+
+1.무기 아이템은 캐릭터와 분리해서 따로 만드시고 
+2.캐릭터(MainChar)를 Hierarchy 창에 올려 놓고 확장시켜 보면 본 연결 상태를 볼 수 있잖아요? 
+3.그중에 연결시키고 싶은 본이 있는 곳에다가 빈 게임 오브젝트 하나 생성한것을 드래그해서 연결 해 놓으세요 
+4.빈 오브젝트 이름을 아무거나 정해놓고("RightWeapon") 아이템 연결이 필요할때 이곳에다가 오브젝트를 생성 시켜 주면 될 듯 하네요 
+5. 캐릭터 오브젝트(MainChar)의 가장 상위쪽에다가 스크립트(CharControl.cs) 하나 연결해 놓고 그 스크립트 내부 함수에서 미리 정해놓은("RightWeapon") 생성 위치 오브젝트를 얻어 놓으세요 
+6. 다음은 스크립트(CharControl.cs) 내용입니다. 
+
+// 멤버 변수로 게임오브젝트 형 변수를 하나 설정합니다. 
+// 나중에 이 오브젝트의 위치에 아이템이 붙도록 할 것입니다. 
+private GameObject m_RWeaponObj; 
+void Start() 
+{ 
+    Transform [] ChildObj; 
+    ChildObj = gameObject.GetComponentsInChildren<Transform>(); 
+
+    foreach( Transform t in ChildObj ) 
+    { 
+        if( t.name == "RightWeapon" ) 
+        { 
+            // 미리 아이템이 붙을 위치의 오브젝트를 찾아 놓습니다. 
+            m_RWeaponObj = t.gameObject; 
+
+            break; 
+        } 
+    } 
+} 
+
+// 아이템 붙이는 함수(사용자 함수) 
+void SetItem( GameObject ItemObj ) 
+{ 
+    // 붙이려고 하는 아이템 오브젝트가 인자로 들어오면 
+    // 원본과 동일한 오브젝트 하나를 생성 시킴니다. 
+    GameObject TempObj = (GameObject)Instantiate( ItemObj ); 
+
+    // 생성 시킨 아이템 오브젝트의 부모를 Start() 함수에서 찾아놨던 오브젝트로 설정해 주면 
+    // 그 위치에 붙습니다. 이렇게 하면 캐릭터 본에 따라 아이템도 따라 움직입니다. 
+    TempObj.transform.parent = m_RWeaponObj.transform; 
+}
+
+- http://www.devkorea.co.kr/bbs/board.php?bo_table=m03_qna&wr_id=3019 -
